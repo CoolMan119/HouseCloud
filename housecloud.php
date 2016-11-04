@@ -2,7 +2,7 @@
 /*
 Created by GreenGene
 
-VERSION: 1.3.5 BETA
+VERSION: 1.3.6 BETA
 */
 
 $action = $_GET[ "action" ];
@@ -120,14 +120,21 @@ else if( $action == "verifyPassword" )
 {
     $username = $_GET[ "username" ];
     $password = $_GET[ "password" ];
-
-    if( verifyPassword( $username, $password) )
+    
+    if( file_exists( "USER_DATA/" . $username ) )
     {
-        echo( json_encode( array( "error" => false, "value" => "correct" ) ) );
+        if( verifyPassword( $usernane, $password ) )
+        {
+            echo( json_encode( array( "error" => false, "value" => "correct" ) ) );
+        }
+        else
+        {
+            echo( json_encode( array( "error" => true, "value" => "incorrect" ) ) );
+        }
     }
     else
     {
-        echo( json_encode( array( "error" => true, "value" => "incorrect" ) ) );
+        echo( json_encode( array( "error" => true, "value" => "account_not_exists" ) ) );
     }
 }
 else if( $action == "deleteFile" )
