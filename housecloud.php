@@ -2,7 +2,7 @@
 /*
 Created by GreenGene
 
-VERSION: 1.0.1 ALPHA
+VERSION: 1.3.5 BETA
 */
 
 $action = $_GET[ "action" ];
@@ -189,6 +189,48 @@ else if( $action == "getFileContents" )
     else
     {
         echo( "HOUSECLOUD_BAD_PASSCODE" );
+    }
+}
+else if( $action == "getStoredFiles" )
+{
+    $username = $_GET[ "username" ];
+    $password = $_GET[ "password" ];
+
+    $accounts = scandir( "USER_DATA" );
+    $exists = false;
+    foreach( $accounts as $key => $value )
+    {
+        if( $value == $username )
+        {
+            $exists = true;
+        }
+    }
+
+    if( $exists )
+    {
+        if( verifyPassword( $username, $password ) )
+        {
+            $search = scandir( "USER_DATA/" . $username . "/FILES" . "/" );
+            $fList = "{";
+            foreach( $search as $key => $value )
+            {
+                if( $value != ".." || $value != "." )
+                {
+                    $fList =  $fList . "'" . $value . "',";
+                }
+            }
+            $fList = $fList . "}";
+
+            echo( $fList );
+        }
+        else
+        {
+            echo( "HOUSECLOUD_BAD_PASSCODE" );
+        }
+    }
+    else
+    {
+        echo( "HOUSECLOUD_ACCOUNT_NOT_EXISTS" );
     }
 }
 else
