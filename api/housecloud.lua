@@ -1,3 +1,9 @@
+--[[
+Created by GreenGene
+
+Version: 1.0.5 BETA
+--]]
+
 os.loadAPI( "json" )
 
 local function httpGET( URL )
@@ -66,6 +72,19 @@ function deleteFile( username, password, filename )
         local dataJson = json.decode( data )
         if dataJson.error == false then
             return true
+        else
+            return false, dataJson.value
+        end
+    end
+end
+
+function verifyPassword( username, password )
+    local data = httpGET( "http://legologs.com/HOUSECLOUD?action=verifyPassword&username="..enc( username ).."&password="..enc( password ) )
+
+    if data ~= false then
+        local dataJson = json.decode( data )
+        if dataJson.error == false then
+            return dataJson.value
         else
             return false, dataJson.value
         end
